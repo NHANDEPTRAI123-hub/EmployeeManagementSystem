@@ -16,6 +16,7 @@ namespace EmployeeManagementSystem.Controller
                 return;
             }
 
+
             // Reset Deduction trước khi tính toán
             salary.Deduction = 0;
 
