@@ -25,7 +25,7 @@ namespace EmployeeManagementSystem
             {
                 loginForm.ShowDialog();
             }
-            this.Close(); // Đóng luôn PreLoginForm sau khi login xong
+            this.Hide(); // Đóng luôn PreLoginForm sau khi login xong
 
         }
 
@@ -37,7 +37,7 @@ namespace EmployeeManagementSystem
             {
                 loginForm2.ShowDialog();
             }
-            this.Close(); // Đóng luôn PreLoginForm sau khi login xong
+            this.Hide(); // Đóng luôn PreLoginForm sau khi login xong
 
         }
 
@@ -47,6 +47,14 @@ namespace EmployeeManagementSystem
 
         }
 
-       
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

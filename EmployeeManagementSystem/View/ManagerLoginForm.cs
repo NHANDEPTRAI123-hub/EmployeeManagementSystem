@@ -81,7 +81,6 @@ namespace EmployeeManagementSystem
                 {
                     mForm.ShowDialog();
                 }
-                this.Show(); // Hiện lại LoginForm sau khi đóng MainForm
             }
             else
             {
@@ -91,6 +90,11 @@ namespace EmployeeManagementSystem
 
         private void login_username_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

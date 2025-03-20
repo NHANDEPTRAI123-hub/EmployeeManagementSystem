@@ -14,7 +14,7 @@ namespace EmployeeManagementSystem
     public partial class AttendanceForm : Form
     {
         private EmployeeData currentEmployee;
-        private const string HOME_WIFI_SSID = "Chu Tuan A201"; // Thay bằng SSID Wi-Fi tại nhà bạn
+        private const string HOME_WIFI_SSID = "A2 1804"; // Thay bằng SSID Wi-Fi tại nhà bạn
 
         public AttendanceForm(EmployeeData employee)
         {
@@ -77,7 +77,7 @@ namespace EmployeeManagementSystem
                 }
 
                 string today = DateTime.Today.ToString("yyyy-MM-dd");
-                List<Attendance> records = Attendance.GetAttendanceByEmployee(currentEmployee.EmployeeID); // Sử dụng EmployeeID kiểu string
+                List<Attendance> records = Attendance.GetAttendanceByEmployee(currentEmployee.EmployeeID);
                 Attendance todayRecord = null;
 
                 for (int i = 0; i < records.Count; i++)
@@ -97,7 +97,7 @@ namespace EmployeeManagementSystem
 
                 Attendance attendance = new Attendance
                 {
-                    EmployeeID = currentEmployee.EmployeeID, // Sử dụng EmployeeID kiểu string
+                    EmployeeID = currentEmployee.EmployeeID,
                     FullName = currentEmployee.Name,
                     Timestamp = DateTime.Now,
                     Action = "CheckIn",
@@ -127,7 +127,7 @@ namespace EmployeeManagementSystem
                 }
 
                 string today = DateTime.Today.ToString("yyyy-MM-dd");
-                List<Attendance> records = Attendance.GetAttendanceByEmployee(currentEmployee.EmployeeID); // Sử dụng EmployeeID kiểu string
+                List<Attendance> records = Attendance.GetAttendanceByEmployee(currentEmployee.EmployeeID);
                 Attendance todayCheckIn = null;
                 Attendance todayCheckOut = null;
 
@@ -157,11 +157,12 @@ namespace EmployeeManagementSystem
 
                 Attendance attendance = new Attendance
                 {
-                    EmployeeID = currentEmployee.EmployeeID, // Sử dụng EmployeeID kiểu string
+                    EmployeeID = currentEmployee.EmployeeID,
                     FullName = currentEmployee.Name,
                     Timestamp = DateTime.Now,
                     Action = "CheckOut",
-                    Date = today
+                    Date = today,
+                    ShiftName = todayCheckIn.ShiftName // Sử dụng cùng ca làm với CheckIn
                 };
 
                 Attendance.AddAttendance(attendance);
@@ -177,7 +178,7 @@ namespace EmployeeManagementSystem
 
         private void UpdateLastAttendanceStatus()
         {
-            List<Attendance> records = Attendance.GetAttendanceByEmployee(currentEmployee.EmployeeID); // Sử dụng EmployeeID kiểu string
+            List<Attendance> records = Attendance.GetAttendanceByEmployee(currentEmployee.EmployeeID);
             Attendance lastRecord = null;
 
             for (int i = 0; i < records.Count; i++)
@@ -190,12 +191,34 @@ namespace EmployeeManagementSystem
 
             if (lastRecord != null)
             {
-                lblLastStatus.Text = "Lần chấm công gần nhất: " + lastRecord.Action + " lúc " + lastRecord.Timestamp.ToString("HH:mm:ss dd/MM/yyyy");
+                string statusInfo = !string.IsNullOrEmpty(lastRecord.Status) ? " - " + lastRecord.Status : "";
+                string shiftInfo = !string.IsNullOrEmpty(lastRecord.ShiftName) ? " (Ca " + lastRecord.ShiftName + ")" : "";
+
+                lblLastStatus.Text = "Lần chấm công gần nhất: " + lastRecord.Action + shiftInfo +
+                                     " lúc " + lastRecord.Timestamp.ToString("HH:mm:ss dd/MM/yyyy") + statusInfo;
             }
             else
             {
                 lblLastStatus.Text = "Chưa có bản ghi chấm công nào.";
             }
+        }
+
+        private void logout_btn_Click(object sender, EventArgs e)
+        {
+            DialogResult check = MessageBox.Show("Are you sure you want to logout?",
+                "Confirmation Message", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (check == DialogResult.Yes)
+            {
+                PreLoginForm preLoginForm = new PreLoginForm();
+                preLoginForm.Show();
+                this.Close(); // Đóng form hiện tại hoàn toàn để tránh hiện tượng tồn tại form cũ
+            }
+        }
+
+        private void exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

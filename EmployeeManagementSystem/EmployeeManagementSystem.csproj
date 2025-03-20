@@ -84,6 +84,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\SalaryManagerController.cs" />
+    <Compile Include="Model\Shift.cs" />
     <Compile Include="View\AddEmployee.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -91,6 +93,12 @@
       <DependentUpon>AddEmployee.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Attendance.cs" />
+    <Compile Include="View\AttendanceManager.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\AttendanceManager.Designer.cs">
+      <DependentUpon>AttendanceManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\Dashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -150,6 +158,9 @@
     <EmbeddedResource Include="View\AttendanceForm.resx">
       <DependentUpon>AttendanceForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\AttendanceManager.resx">
+      <DependentUpon>AttendanceManager.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
     </EmbeddedResource>
@@ -208,7 +219,6 @@
     <None Include="Resources\pexels-jane-doan-1024248.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controller\" />
     <Folder Include="Directory\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

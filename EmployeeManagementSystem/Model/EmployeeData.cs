@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 
 namespace EmployeeManagementSystem
 {
     public class EmployeeData
     {
-        public int ID { set; get; }
-        public string EmployeeID { set; get; }
-        public string Name { set; get; }
-        public string Gender { set; get; }
-        public string Contact { set; get; }
-        public string Position { set; get; }
-        public string Image { set; get; }
-        public int Salary { set; get; }
-        public string Status { set; get; }
-        public string Password { set; get; }
+        public int Order { get; set; }  // Thứ tự nhân viên
+        public string EmployeeID { get; set; }
+        public string Name { get; set; }
+        public string Gender { get; set; }
+        public string Contact { get; set; }
+        public string Position { get; set; }
+        public string Image { get; set; }
+        public string Password { get; set; }
 
         private static string filePath = "employees.json"; // Đường dẫn file JSON
 
@@ -25,19 +23,12 @@ namespace EmployeeManagementSystem
         public static List<EmployeeData> LoadFromJson()
         {
             if (!File.Exists(filePath))
-            {
                 return new List<EmployeeData>();
-            }
 
             string json = File.ReadAllText(filePath);
             List<EmployeeData> data = JsonConvert.DeserializeObject<List<EmployeeData>>(json);
 
-            if (data == null)
-            {
-                return new List<EmployeeData>();
-            }
-
-            return data;
+            return data ?? new List<EmployeeData>(); // Tránh lỗi nếu dữ liệu rỗng
         }
 
         // Lưu danh sách nhân viên vào JSON
@@ -47,24 +38,7 @@ namespace EmployeeManagementSystem
             File.WriteAllText(filePath, json);
         }
 
-        // Lấy danh sách nhân viên không bị xóa
-        public List<EmployeeData> employeeListData()
-        {
-            List<EmployeeData> listdata = LoadFromJson();
-            List<EmployeeData> result = new List<EmployeeData>();
-
-            foreach (EmployeeData emp in listdata)
-            {
-                if (emp.Status != "Deleted")
-                {
-                    result.Add(emp);
-                }
-            }
-
-            return result;
-        }
-
-        // Thêm nhân viên
+        // Thêm nhân viên (Tự động tăng `Order`)
         public static bool AddEmployee(EmployeeData newEmployee)
         {
             List<EmployeeData> employees = LoadFromJson();
@@ -78,41 +52,33 @@ namespace EmployeeManagementSystem
                 }
             }
 
-            // Tìm ID lớn nhất hiện có
-            int maxID = 0;
-            foreach (EmployeeData emp in employees)
-            {
-                if (emp.ID > maxID)
-                {
-                    maxID = emp.ID;
-                }
-            }
+            // Tìm Order lớn nhất hiện có
+            int maxOrder = employees.Count > 0 ? employees[employees.Count - 1].Order : 0;
 
-            newEmployee.ID = maxID + 1;
-
+            // Gán Order mới
+            newEmployee.Order = maxOrder + 1;
             employees.Add(newEmployee);
+
             SaveToJson(employees);
-            return true; // Thêm thành công
+            return true;
         }
 
-        // Cập nhật nhân viên
+
+        // Cập nhật nhân viên (Không thay đổi `Order`)
         public static bool UpdateEmployee(EmployeeData updatedEmployee)
         {
             List<EmployeeData> employees = LoadFromJson();
             bool isUpdated = false;
 
-            foreach (EmployeeData emp in employees)
+            for (int i = 0; i < employees.Count; i++)
             {
-                if (emp.EmployeeID == updatedEmployee.EmployeeID)
+                if (employees[i].EmployeeID == updatedEmployee.EmployeeID)
                 {
-                    emp.Name = updatedEmployee.Name;
-                    emp.Gender = updatedEmployee.Gender;
-                    emp.Contact = updatedEmployee.Contact;
-                    emp.Position = updatedEmployee.Position;
-                    emp.Image = updatedEmployee.Image;
-                    emp.Salary = updatedEmployee.Salary;
-                    emp.Status = updatedEmployee.Status;
-                    emp.Password = updatedEmployee.Password;
+                    // Giữ nguyên `Order`
+                    updatedEmployee.Order = employees[i].Order;
+
+                    // Cập nhật thông tin
+                    employees[i] = updatedEmployee;
                     isUpdated = true;
                     break;
                 }
@@ -126,31 +92,29 @@ namespace EmployeeManagementSystem
             return isUpdated;
         }
 
-        // Xóa nhân viên và sắp xếp lại ID
+        // Xóa nhân viên và sắp xếp lại `Order`
+        // Xóa nhân viên và cập nhật lại Order
         public static bool DeleteEmployee(string employeeID)
         {
             List<EmployeeData> employees = LoadFromJson();
             bool isDeleted = false;
-            int indexToRemove = -1;
 
             for (int i = 0; i < employees.Count; i++)
             {
                 if (employees[i].EmployeeID == employeeID)
                 {
-                    indexToRemove = i;
+                    employees.RemoveAt(i); // Xóa nhân viên
                     isDeleted = true;
                     break;
                 }
             }
 
-            if (isDeleted && indexToRemove != -1)
+            if (isDeleted)
             {
-                employees.RemoveAt(indexToRemove);
-
-                // Sắp xếp lại ID từ 1 trở đi
+                // Cập nhật lại Order từ 1
                 for (int i = 0; i < employees.Count; i++)
                 {
-                    employees[i].ID = i + 1;
+                    employees[i].Order = i + 1;
                 }
 
                 SaveToJson(employees);
@@ -174,6 +138,9 @@ namespace EmployeeManagementSystem
 
             return null;
         }
-    }
 
+
+        
+
+    }
 }

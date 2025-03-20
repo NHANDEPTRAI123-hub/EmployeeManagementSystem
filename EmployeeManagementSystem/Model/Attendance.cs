@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace EmployeeManagementSystem
@@ -14,7 +11,16 @@ namespace EmployeeManagementSystem
         private string fullName;
         private DateTime timestamp;
         private string action;
-        private string date;
+        public string date;
+        private string shiftName; // Tên ca làm
+        private string status; // Trạng thái chấm công
+
+
+        public string ShiftName
+        {
+            get { return shiftName; }
+            set { shiftName = value; }
+        }
 
         public string EmployeeID
         {
@@ -45,58 +51,106 @@ namespace EmployeeManagementSystem
             get { return date; }
             set { date = value; }
         }
+        public string Status
+        {
+            get { return status; }
+            set { status = value; }
+        }
+        
 
         private static string filePath = "attendance.json";
 
-    // Đọc danh sách chấm công từ JSON
+        // Đọc danh sách chấm công từ JSON
         public static List<Attendance> LoadFromJson()
+        {
+            if (!File.Exists(filePath))
             {
-                if (!File.Exists(filePath))
-                {
-                    return new List<Attendance>();
-                }
-
-                string json = File.ReadAllText(filePath);
-                List<Attendance> records = JsonConvert.DeserializeObject<List<Attendance>>(json);
-
-                if (records == null)
-                {
-                    return new List<Attendance>();
-                }
-
-                return records;
+                return new List<Attendance>();
             }
 
-            // Lưu danh sách chấm công vào JSON
-            public static void SaveToJson(List<Attendance> attendanceRecords)
+            string json = File.ReadAllText(filePath);
+            List<Attendance> records = JsonConvert.DeserializeObject<List<Attendance>>(json);
+
+            if (records == null)
             {
-                string json = JsonConvert.SerializeObject(attendanceRecords, Formatting.Indented);
-                File.WriteAllText(filePath, json);
+                return new List<Attendance>();
             }
 
-            // Thêm một bản ghi chấm công
-            public static void AddAttendance(Attendance record)
-            {
-                List<Attendance> records = LoadFromJson();
-                records.Add(record);
-                SaveToJson(records);
-            }
+            return records;
+        }
 
-            // Lấy danh sách chấm công của một nhân viên (sử dụng string)
-            public static List<Attendance> GetAttendanceByEmployee(string employeeID)
-            {
-                List<Attendance> records = LoadFromJson();
-                List<Attendance> employeeRecords = new List<Attendance>();
+        // Lưu danh sách chấm công vào JSON
+        public static void SaveToJson(List<Attendance> attendanceRecords)
+        {
+            string json = JsonConvert.SerializeObject(attendanceRecords, Formatting.Indented);
+            File.WriteAllText(filePath, json);
+        }
 
-                for (int i = 0; i < records.Count; i++)
+        // Thêm một bản ghi chấm công
+        // Thêm vào phương thức AddAttendance trong class Attendance
+        public static void AddAttendance(Attendance record)
+        {
+            List<Attendance> records = LoadFromJson();
+            List<Shift> shifts = new List<Shift>
+    {
+        new Shift("Morning", new TimeSpan(3, 0, 0), new TimeSpan(11, 0, 0)),
+        new Shift("Afternoon", new TimeSpan(13, 0, 0), new TimeSpan(17, 0, 0))
+    };
+
+            // Xác định ca làm việc dựa trên thời gian
+            TimeSpan currentTime = record.Timestamp.TimeOfDay;
+            bool shiftFound = false;
+
+            foreach (var shift in shifts)
+            {
+                if ((currentTime >= shift.StartTime.Add(new TimeSpan(-1, 0, 0)) &&
+                     currentTime <= shift.EndTime.Add(new TimeSpan(1, 0, 0))))
                 {
-                    if (records[i].EmployeeID == employeeID)
+                    record.ShiftName = shift.ShiftName;
+                    shiftFound = true;
+
+                    // Xác định status
+                    if (record.Action == "CheckIn")
                     {
-                        employeeRecords.Add(records[i]);
+                        record.Status = currentTime > shift.StartTime ? "Đi trễ" : "Đúng giờ";
                     }
+                    else if (record.Action == "CheckOut")
+                    {
+                        record.Status = currentTime < shift.EndTime ? "Về sớm" : "Đúng giờ";
+                    }
+                    break;
                 }
-
-                return employeeRecords;
             }
-     }
+
+            // Nếu không tìm thấy ca làm nào phù hợp
+            if (!shiftFound)
+            {
+                record.ShiftName = "Unknown";
+                record.Status = "Unknown";
+            }
+
+            records.Add(record);
+            SaveToJson(records);
+        }
+
+
+
+        // Lấy danh sách chấm công của một nhân viên (sử dụng string)
+        public static List<Attendance> GetAttendanceByEmployee(string employeeID)
+        {
+            List<Attendance> records = LoadFromJson();
+            List<Attendance> employeeRecords = new List<Attendance>();
+
+            for (int i = 0; i < records.Count; i++)
+            {
+                if (records[i].EmployeeID == employeeID)
+                {
+                    employeeRecords.Add(records[i]);
+                }
+            }
+
+            return employeeRecords;
+        }
+       
+    }
 }

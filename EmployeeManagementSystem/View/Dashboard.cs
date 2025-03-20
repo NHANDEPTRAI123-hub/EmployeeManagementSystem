@@ -33,51 +33,34 @@ namespace EmployeeManagementSystem
 
         public void displayTE()
         {
-            var employees = EmployeeData.LoadFromJson();
-            int count = 0;
-
-            for (int i = 0; i < employees.Count; i++)
-            {
-                if (employees[i].Status != "Deleted")
-                {
-                    count++;
-                }
-            }
+            List<EmployeeData> employees = EmployeeData.LoadFromJson();
+            int count = employees.Count; // Đếm số nhân viên hiện có
 
             dashboard_TE.Text = count.ToString();
         }
 
+
         public void displayAE()
         {
-            var employees = EmployeeData.LoadFromJson();
-            int count = 0;
+            List<Attendance> attendanceRecords = Attendance.LoadFromJson();
+            string today = DateTime.Now.ToString("yyyy-MM-dd");
 
-            for (int i = 0; i < employees.Count; i++)
-            {
-                if (employees[i].Status == "Active")
-                {
-                    count++;
-                }
-            }
+            // Đếm số nhân viên đã CheckIn hôm nay
+            int checkedInCount = attendanceRecords.Count(a => a.Action == "CheckIn" && a.Date == today);
 
-            dashboard_AE.Text = count.ToString();
+            dashboard_AE.Text = checkedInCount.ToString();
         }
 
         public void displayIE()
         {
-            var employees = EmployeeData.LoadFromJson();
-            int count = 0;
+            int totalEmployees = int.Parse(dashboard_TE.Text); // Tổng số nhân viên
+            int checkedInEmployees = int.Parse(dashboard_AE.Text); // Nhân viên đã CheckIn
+            int notCheckedInEmployees = totalEmployees - checkedInEmployees;
 
-            for (int i = 0; i < employees.Count; i++)
-            {
-                if (employees[i].Status == "Inactive")
-                {
-                    count++;
-                }
-            }
-
-            dashboard_IE.Text = count.ToString();
+            dashboard_IE.Text = notCheckedInEmployees.ToString();
         }
+
+
 
         private void panel3_Paint(object sender, PaintEventArgs e)
         {
@@ -100,6 +83,16 @@ namespace EmployeeManagementSystem
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel5_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void dashboard_TE_Click(object sender, EventArgs e)
         {
 
         }

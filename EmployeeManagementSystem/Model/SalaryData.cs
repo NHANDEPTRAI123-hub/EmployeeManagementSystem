@@ -3,40 +3,52 @@ using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace EmployeeManagementSystem
+public class SalaryData
 {
-    class SalaryData
+    public string EmployeeID { get; set; }
+    public string Name { get; set; }
+    public string Position { get; set; }
+    public decimal Salary { get; set; } // Mức lương mặc định
+    public decimal Deduction { get; set; } // Số tiền bị trừ do đi trễ/về sớm
+    public decimal Bonus { get; set; } // Lương thưởng
+    public decimal CurrentSalary { get; set; } // Lương sau khi tính toán
+
+    private static string filePath = "salary_data.json"; // File JSON lưu lương
+
+    public SalaryData()
     {
-        public string EmployeeID { set; get; }
-        public string Name { set; get; }
-        public string Gender { set; get; }
-        public string Contact { set; get; }
-        public string Position { set; get; }
-        public int Salary { set; get; }
+        Deduction = 0;
+        Bonus = 0;
+        UpdateCurrentSalary();
+    }
 
-        private static string filePath = "employees.json"; // File JSON lưu dữ liệu nhân viên
+    // Cập nhật lại CurrentSalary sau mỗi lần thay đổi Deduction hoặc Bonus
+    public void UpdateCurrentSalary()
+    {
+        CurrentSalary = Salary - Deduction + Bonus;
+        if (CurrentSalary < 0) CurrentSalary = 0; // Đảm bảo lương không âm
+    }
 
-        // Đọc danh sách nhân viên từ JSON
-        public static List<SalaryData> LoadFromJson()
-        {
-            if (!File.Exists(filePath)) return new List<SalaryData>();
+    // Đọc danh sách lương từ JSON
+    public static List<SalaryData> LoadFromJson()
+    {
+        if (!File.Exists(filePath)) return new List<SalaryData>();
 
-            string json = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<List<SalaryData>>(json) ?? new List<SalaryData>();
-        }
+        string json = File.ReadAllText(filePath);
+        return JsonConvert.DeserializeObject<List<SalaryData>>(json) ?? new List<SalaryData>();
+    }
 
-        // Lưu danh sách nhân viên vào JSON
-        public static void SaveToJson(List<SalaryData> employees)
-        {
-            string json = JsonConvert.SerializeObject(employees, Formatting.Indented);
-            File.WriteAllText(filePath, json);
-        }
+    // Lưu danh sách lương vào JSON
+    public static void SaveToJson(List<SalaryData> salaries)
+    {
+        string json = JsonConvert.SerializeObject(salaries, Formatting.Indented);
+        File.WriteAllText(filePath, json);
+    }
 
-        // Lấy danh sách nhân viên có trạng thái "Active"
-        public List<SalaryData> salaryEmployeeListData()
-        {
-            List<SalaryData> listdata = LoadFromJson();
-            return listdata.FindAll(emp => emp.Salary > 0); // Giữ nguyên logic lọc lương
-        }
+    // Lấy mức lương theo EmployeeID
+    public static SalaryData GetSalaryByEmployeeID(string employeeID)
+    {
+        List<SalaryData> salaryList = LoadFromJson();
+        return salaryList.Find(s => s.EmployeeID == employeeID);
     }
 }

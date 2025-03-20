@@ -29,9 +29,9 @@ namespace EmployeeManagementSystem
 
             if (check == DialogResult.Yes)
             {
-                ManagerLoginForm loginForm = new ManagerLoginForm();
-                loginForm.Show();
-                this.Hide();
+            PreLoginForm preLoginForm = new PreLoginForm();
+            preLoginForm.Show();
+            this.Close(); // Đóng form hiện tại hoàn toàn để tránh hiện tượng tồn tại form cũ
             }
         }
 
@@ -40,7 +40,8 @@ namespace EmployeeManagementSystem
             dashboard1.Visible = true;
             addEmployee1.Visible = false;
             salary1.Visible = false;
-         
+            attendanceManager1.Visible = false;
+
 
 
             if (dashboard1 is Dashboard)
@@ -55,7 +56,8 @@ namespace EmployeeManagementSystem
             dashboard1.Visible = false;
             addEmployee1.Visible = true;
             salary1.Visible = false;
-        
+            attendanceManager1.Visible = false;
+
 
 
             if (addEmployee1 is AddEmployee)
@@ -70,7 +72,7 @@ namespace EmployeeManagementSystem
             dashboard1.Visible = false;
             addEmployee1.Visible = false;
             salary1.Visible = true;
-           
+            attendanceManager1.Visible = false;
 
             if (salary1 is Salary)
             {
@@ -88,6 +90,20 @@ namespace EmployeeManagementSystem
       
 
         private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnManageAttendance_Click_1(object sender, EventArgs e)
+        {
+            dashboard1.Visible = false;
+            addEmployee1.Visible = false;
+            salary1.Visible = false;
+            attendanceManager1.Visible = true;
+
+        }
+
+        private void dashboard1_Load_1(object sender, EventArgs e)
         {
 
         }

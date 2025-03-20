@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmployeeManagementSystem.Controller;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,11 +13,9 @@ namespace EmployeeManagementSystem
 {
     public partial class Salary : UserControl
     {
-
         public Salary()
         {
             InitializeComponent();
-
             displayEmployees();
             disableFields();
         }
@@ -33,7 +32,6 @@ namespace EmployeeManagementSystem
             disableFields();
         }
 
-
         public void disableFields()
         {
             salary_employeeID.Enabled = false;
@@ -43,96 +41,135 @@ namespace EmployeeManagementSystem
 
         public void displayEmployees()
         {
-            List<SalaryData> listData = SalaryData.LoadFromJson(); // Đọc dữ liệu từ JSON
-            dataGridView1.DataSource = listData;
+            List<EmployeeData> employees = EmployeeData.LoadFromJson();
+            List<SalaryData> salaries = SalaryData.LoadFromJson();
+            List<SalaryData> mergedData = new List<SalaryData>();
+
+            foreach (EmployeeData emp in employees)
+            {
+                // Gọi tính toán lại lương trước khi hiển thị
+                SalaryManager salaryManager = new SalaryManager();
+                salaryManager.CalculateSalary(emp.EmployeeID); // 🔥 Dòng quan trọng cần thêm
+
+                SalaryData salaryInfo = SalaryData.GetSalaryByEmployeeID(emp.EmployeeID);
+
+                SalaryData newSalaryData = new SalaryData
+                {
+                    EmployeeID = emp.EmployeeID,
+                    Name = emp.Name,
+                    Position = emp.Position,
+                    Salary = salaryInfo?.Salary ?? 0,
+                    Bonus = salaryInfo?.Bonus ?? 0,
+                    Deduction = salaryInfo?.Deduction ?? 0, // Đảm bảo hiển thị giá trị Deduction
+                    CurrentSalary = salaryInfo?.CurrentSalary ?? 0
+                };
+
+                mergedData.Add(newSalaryData);
+            }
+
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = mergedData;
         }
+
 
 
         private void salary_updateBtn_Click(object sender, EventArgs e)
         {
-            if (salary_employeeID.Text == ""
-                || salary_name.Text == ""
-                || salary_position.Text == ""
-                || salary_salary.Text == "")
+            if (string.IsNullOrWhiteSpace(salary_employeeID.Text) ||
+                string.IsNullOrWhiteSpace(reward_reward.Text))
             {
-                MessageBox.Show("Please fill all blank fields", "Error Message",
+                MessageBox.Show("Please fill in all required fields!", "Error Message",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            else
+
+            if (!decimal.TryParse(reward_reward.Text.Trim(), out decimal rewardAmount))
             {
-                DialogResult check = MessageBox.Show("Are you sure you want to UPDATE Employee ID: "
-                    + salary_employeeID.Text.Trim() + "?", "Confirmation Message",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                MessageBox.Show("Invalid reward amount!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-                if (check == DialogResult.Yes)
+            DialogResult check = MessageBox.Show("Are you sure you want to UPDATE Employee ID: "
+                + salary_employeeID.Text.Trim() + "?", "Confirmation Message",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (check == DialogResult.Yes)
+            {
+                try
                 {
-                    try
+                    string empID = salary_employeeID.Text.Trim();
+                    List<SalaryData> salaries = SalaryData.LoadFromJson();
+                    SalaryData salaryEntry = null;
+
+                    // Tìm nhân viên trong danh sách lương
+                    for (int i = 0; i < salaries.Count; i++)
                     {
-                        // Đọc dữ liệu từ JSON
-                        List<SalaryData> employees = SalaryData.LoadFromJson();
-                        string empID = salary_employeeID.Text.Trim();
-                        SalaryData employee = employees.Find(emp => emp.EmployeeID == empID);
-
-                        if (employee != null)
+                        if (salaries[i].EmployeeID == empID)
                         {
-                            employee.Salary = int.Parse(salary_salary.Text.Trim()); // Cập nhật lương
-                            SalaryData.SaveToJson(employees); // Lưu lại dữ liệu vào JSON
-
-                            displayEmployees(); // Hiển thị danh sách cập nhật
-
-                            MessageBox.Show("Updated successfully!", "Information Message",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            clearFields();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Employee ID not found!", "Error Message",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            salaryEntry = salaries[i];
+                            break;
                         }
                     }
-                    catch (Exception ex)
+
+                    if (salaryEntry != null)
                     {
-                        MessageBox.Show("Error: " + ex, "Error Message",
+                        salaryEntry.Bonus += rewardAmount;
+                        salaryEntry.UpdateCurrentSalary();
+                        SalaryData.SaveToJson(salaries);
+                        displayEmployees();
+
+                        MessageBox.Show("Updated successfully!", "Information Message",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        clearFields();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Employee not found!", "Error Message",
                             MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Cancelled", "Information Message",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Error: " + ex.Message, "Error Message",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+
+                salary_employeeID.Text = row.Cells["EmployeeID"].Value?.ToString();
+                salary_name.Text = row.Cells["Name"].Value?.ToString();
+                salary_position.Text = row.Cells["Position"].Value?.ToString();
+
+                // Để trống ô Reward để nhập số tiền thưởng mới
+                reward_reward.Text = "";
+            }
+        }
+
+
 
         public void clearFields()
         {
             salary_employeeID.Text = "";
             salary_name.Text = "";
             salary_position.Text = "";
-            salary_salary.Text = "";
+            reward_reward.Text = "";
         }
 
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex != -1)
-            {
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
-
-                salary_employeeID.Text = row.Cells["EmployeeID"].Value.ToString();
-                salary_name.Text = row.Cells["Name"].Value.ToString();
-                salary_position.Text = row.Cells["Position"].Value.ToString();
-                salary_salary.Text = row.Cells["Salary"].Value.ToString();
-            }
-        }
 
 
         private void salary_clearBtn_Click(object sender, EventArgs e)
         {
             clearFields();
         }
+    
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+    private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

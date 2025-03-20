@@ -49,8 +49,7 @@ namespace EmployeeManagementSystem
                 for (int i = 0; i < employees.Count; i++)
                 {
                     if (employees[i].Name.Equals(inputFullName, StringComparison.OrdinalIgnoreCase) &&
-                        employees[i].Password == inputPassword &&
-                        employees[i].Status != "Deleted")
+                        employees[i].Password == inputPassword) 
                     {
                         employee = employees[i];
                         break;
