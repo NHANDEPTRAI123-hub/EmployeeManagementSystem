@@ -123,6 +123,7 @@ namespace EmployeeManagementSystem
             this.exit.Size = new System.Drawing.Size(21, 23);
             this.exit.TabIndex = 11;
             this.exit.Text = "X";
+            this.exit.Click += new System.EventHandler(this.exit_Click);
             // 
             // pictureBox1
             // 
