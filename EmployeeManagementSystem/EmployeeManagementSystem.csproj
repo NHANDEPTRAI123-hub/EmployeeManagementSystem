@@ -207,6 +207,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\back.png" />
+    <None Include="Assets\icons8-employee-100.png" />
+    <None Include="Assets\icons8-hr-manager-64 %28woman%29.png" />
+    <None Include="Assets\icons8-hr-manager-64.png" />
     <Content Include="Assets\icons8_commercial_development_management_60px.png" />
     <Content Include="Assets\icons8_dashboard_30px.png" />
     <Content Include="Assets\icons8_employee_card_100px.png" />

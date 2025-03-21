@@ -30,7 +30,6 @@ namespace EmployeeManagementSystem
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EmployeeLoginForm));
             this.Full_name = new System.Windows.Forms.TextBox();
             this.EmployeePassword = new System.Windows.Forms.TextBox();
             this.ShowPassword = new System.Windows.Forms.RadioButton();
@@ -47,7 +46,7 @@ namespace EmployeeManagementSystem
             // 
             this.Full_name.Font = new System.Drawing.Font("Tahoma", 11.25F);
             this.Full_name.Location = new System.Drawing.Point(209, 231);
-            this.Full_name.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Full_name.Margin = new System.Windows.Forms.Padding(4);
             this.Full_name.Name = "Full_name";
             this.Full_name.Size = new System.Drawing.Size(347, 30);
             this.Full_name.TabIndex = 0;
@@ -56,7 +55,7 @@ namespace EmployeeManagementSystem
             // 
             this.EmployeePassword.Font = new System.Drawing.Font("Tahoma", 11.25F);
             this.EmployeePassword.Location = new System.Drawing.Point(209, 303);
-            this.EmployeePassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.EmployeePassword.Margin = new System.Windows.Forms.Padding(4);
             this.EmployeePassword.Name = "EmployeePassword";
             this.EmployeePassword.Size = new System.Drawing.Size(347, 30);
             this.EmployeePassword.TabIndex = 1;
@@ -66,7 +65,7 @@ namespace EmployeeManagementSystem
             this.ShowPassword.AutoSize = true;
             this.ShowPassword.Font = new System.Drawing.Font("Tahoma", 9F);
             this.ShowPassword.Location = new System.Drawing.Point(433, 356);
-            this.ShowPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ShowPassword.Margin = new System.Windows.Forms.Padding(4);
             this.ShowPassword.Name = "ShowPassword";
             this.ShowPassword.Size = new System.Drawing.Size(129, 22);
             this.ShowPassword.TabIndex = 2;
@@ -83,7 +82,7 @@ namespace EmployeeManagementSystem
             this.LoginButton.Font = new System.Drawing.Font("Arial Rounded MT Bold", 9.75F);
             this.LoginButton.ForeColor = System.Drawing.Color.White;
             this.LoginButton.Location = new System.Drawing.Point(209, 389);
-            this.LoginButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.LoginButton.Margin = new System.Windows.Forms.Padding(4);
             this.LoginButton.Name = "LoginButton";
             this.LoginButton.Size = new System.Drawing.Size(124, 42);
             this.LoginButton.TabIndex = 3;
@@ -127,7 +126,7 @@ namespace EmployeeManagementSystem
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Image = global::EmployeeManagementSystem.Properties.Resources.icons8_employee_100;
             this.pictureBox1.Location = new System.Drawing.Point(332, 26);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(102, 108);
@@ -162,7 +161,7 @@ namespace EmployeeManagementSystem
             this.Controls.Add(this.Full_name);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "EmployeeLoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
