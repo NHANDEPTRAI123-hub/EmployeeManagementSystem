@@ -126,14 +126,14 @@
             // 
             // lblLastStatus
             // 
-            this.lblLastStatus.AutoSize = true;
             this.lblLastStatus.BackColor = System.Drawing.Color.Transparent;
+            this.lblLastStatus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblLastStatus.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLastStatus.ForeColor = System.Drawing.Color.White;
-            this.lblLastStatus.Location = new System.Drawing.Point(10, 132);
+            this.lblLastStatus.Location = new System.Drawing.Point(0, 0);
             this.lblLastStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLastStatus.Name = "lblLastStatus";
-            this.lblLastStatus.Size = new System.Drawing.Size(54, 21);
+            this.lblLastStatus.Size = new System.Drawing.Size(652, 216);
             this.lblLastStatus.TabIndex = 1;
             this.lblLastStatus.Text = "label1";
             this.lblLastStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -142,9 +142,10 @@
             // 
             this.lblEmployeeInfo.AutoSize = true;
             this.lblEmployeeInfo.BackColor = System.Drawing.Color.Transparent;
+            this.lblEmployeeInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblEmployeeInfo.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEmployeeInfo.ForeColor = System.Drawing.Color.White;
-            this.lblEmployeeInfo.Location = new System.Drawing.Point(10, 30);
+            this.lblEmployeeInfo.Location = new System.Drawing.Point(0, 0);
             this.lblEmployeeInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblEmployeeInfo.Name = "lblEmployeeInfo";
             this.lblEmployeeInfo.Size = new System.Drawing.Size(54, 21);

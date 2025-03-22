@@ -118,9 +118,9 @@ namespace EmployeeManagementSystem
             this.label3.Location = new System.Drawing.Point(388, 164);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(91, 21);
+            this.label3.Size = new System.Drawing.Size(83, 21);
             this.label3.TabIndex = 12;
-            this.label3.Text = "Username:";
+            this.label3.Text = "Fullname:";
             // 
             // label2
             // 
