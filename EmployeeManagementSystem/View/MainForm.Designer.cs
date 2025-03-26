@@ -96,7 +96,7 @@ namespace EmployeeManagementSystem
             // 
             // panel2
             // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(118)))), ((int)(((byte)(114)))), ((int)(((byte)(248)))));
+            this.panel2.BackColor = System.Drawing.Color.White;
             this.panel2.Controls.Add(this.btnManageAttendance);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.logout_btn);
@@ -137,7 +137,7 @@ namespace EmployeeManagementSystem
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.White;
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(118)))), ((int)(((byte)(114)))), ((int)(((byte)(248)))));
             this.label4.Location = new System.Drawing.Point(71, 649);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
@@ -147,6 +147,7 @@ namespace EmployeeManagementSystem
             // 
             // logout_btn
             // 
+            this.logout_btn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(118)))), ((int)(((byte)(114)))), ((int)(((byte)(248)))));
             this.logout_btn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.logout_btn.FlatAppearance.BorderSize = 0;
             this.logout_btn.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(75)))), ((int)(((byte)(8)))), ((int)(((byte)(138)))));
@@ -160,7 +161,7 @@ namespace EmployeeManagementSystem
             this.logout_btn.Name = "logout_btn";
             this.logout_btn.Size = new System.Drawing.Size(47, 43);
             this.logout_btn.TabIndex = 5;
-            this.logout_btn.UseVisualStyleBackColor = true;
+            this.logout_btn.UseVisualStyleBackColor = false;
             this.logout_btn.Click += new System.EventHandler(this.logout_btn_Click);
             // 
             // salary_btn
@@ -229,22 +230,24 @@ namespace EmployeeManagementSystem
             // greet_user
             // 
             this.greet_user.AutoSize = true;
+            this.greet_user.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(118)))), ((int)(((byte)(114)))), ((int)(((byte)(248)))));
             this.greet_user.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.greet_user.ForeColor = System.Drawing.Color.White;
-            this.greet_user.Location = new System.Drawing.Point(61, 182);
+            this.greet_user.Location = new System.Drawing.Point(57, 203);
             this.greet_user.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.greet_user.Name = "greet_user";
             this.greet_user.Size = new System.Drawing.Size(181, 24);
             this.greet_user.TabIndex = 1;
             this.greet_user.Text = "Welcome, Manager";
+            this.greet_user.Click += new System.EventHandler(this.greet_user_Click);
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(83, 55);
+            this.pictureBox1.Location = new System.Drawing.Point(19, 8);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(133, 123);
+            this.pictureBox1.Size = new System.Drawing.Size(267, 208);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -290,6 +293,7 @@ namespace EmployeeManagementSystem
             // attendanceManager1
             // 
             this.attendanceManager1.Location = new System.Drawing.Point(0, 0);
+            this.attendanceManager1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.attendanceManager1.Name = "attendanceManager1";
             this.attendanceManager1.Size = new System.Drawing.Size(1167, 695);
             this.attendanceManager1.TabIndex = 0;

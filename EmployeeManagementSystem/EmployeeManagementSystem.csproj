@@ -234,6 +234,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\dashboard1.jpg" />
     <None Include="Resources\back.png" />
     <None Include="Assets\icons8-employee-100.png" />
     <None Include="Assets\icons8-hr-manager-64 %28woman%29.png" />

@@ -107,5 +107,10 @@ namespace EmployeeManagementSystem
         {
 
         }
+
+        private void greet_user_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
