@@ -93,7 +93,7 @@ namespace EmployeeManagementSystem
             List<Attendance> records = LoadFromJson();
             List<Shift> shifts = new List<Shift>
     {
-        new Shift("Morning", new TimeSpan(3, 0, 0), new TimeSpan(11, 0, 0)),
+        new Shift("Morning", new TimeSpan(7, 0, 0), new TimeSpan(11, 0, 0)),
         new Shift("Afternoon", new TimeSpan(13, 0, 0), new TimeSpan(17, 0, 0))
     };
 

@@ -209,7 +209,7 @@ namespace EmployeeManagementSystem.Controller
             {
                 PreLoginForm preLoginForm = new PreLoginForm();
                 preLoginForm.Show();
-                _view.Close();
+                _view.CloseForm();
             }
         }
 

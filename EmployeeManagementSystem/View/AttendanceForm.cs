@@ -75,7 +75,7 @@ namespace EmployeeManagementSystem
             return MessageBox.Show(message, caption, buttons, icon);
         }
 
-        public void Close()
+        public void CloseForm()
         {
             this.Close();
         }

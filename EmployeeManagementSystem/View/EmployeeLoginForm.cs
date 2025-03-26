@@ -111,6 +111,11 @@ namespace EmployeeManagementSystem
                 LoginButton_Click(sender, e);
             }
         }
+
+        private void exit_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
     }
 
 }
