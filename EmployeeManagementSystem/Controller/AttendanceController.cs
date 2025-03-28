@@ -12,13 +12,20 @@ namespace EmployeeManagementSystem.Controller
     {
         private readonly AttendanceForm _view;
         private readonly EmployeeData _currentEmployee;
-        private const string Company_WIFI_SSID = "Chu Tuan A201";
+        private const string Company_WIFI_SSID = "Nhan"; 
+        public delegate void ShowMessageHandler(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon);
+        public delegate DialogResult ShowConfirmationHandler(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon);
 
+        public event ShowMessageHandler OnShowMessage;
+        public event ShowConfirmationHandler OnShowConfirmation;
         public AttendanceController(AttendanceForm view, EmployeeData employee)
         {
             _view = view;
             _currentEmployee = employee;
             _view.SetController(this); // Liên kết Controller với View
+            // Đăng ký các event với các phương thức của view
+            OnShowMessage += _view.ShowMessage;
+            OnShowConfirmation += _view.ShowConfirmation;
         }
 
         public void LoadForm()
@@ -33,8 +40,8 @@ namespace EmployeeManagementSystem.Controller
             {
                 if (!IsConnectedToCompanyWiFi())
                 {
-                    _view.ShowMessage("You can only check in when using the companies wifi",
-                        "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    OnShowMessage?.Invoke("You can only check in when using the companies wifi",
+                         "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -53,7 +60,7 @@ namespace EmployeeManagementSystem.Controller
 
                 if (todayRecord != null)
                 {
-                    _view.ShowMessage("You have already check in!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    OnShowMessage?.Invoke("You have already check in!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -68,13 +75,13 @@ namespace EmployeeManagementSystem.Controller
 
                 Attendance.AddAttendance(attendance);
 
-                _view.ShowMessage($"Check in successfully at {DateTime.Now.ToString("HH:mm:ss")}!",
-                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                OnShowMessage?.Invoke($"Check in successfully at {DateTime.Now.ToString("HH:mm:ss")}!",
+                     "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 UpdateLastAttendanceStatus();
             }
             catch (Exception ex)
             {
-                _view.ShowMessage($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OnShowMessage?.Invoke($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -84,7 +91,7 @@ namespace EmployeeManagementSystem.Controller
             {
                 if (!IsConnectedToCompanyWiFi())
                 {
-                    _view.ShowMessage("You can only check out when using the company wifi",
+                    OnShowMessage?.Invoke("You can only check out when using the company wifi",
                         "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
@@ -108,13 +115,13 @@ namespace EmployeeManagementSystem.Controller
 
                 if (todayCheckIn == null)
                 {
-                    _view.ShowMessage("You have not check yet!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    OnShowMessage?.Invoke("You have not check yet in!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 if (todayCheckOut != null)
                 {
-                    _view.ShowMessage("You have already check out!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    OnShowMessage?.Invoke("You have already check out!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -130,13 +137,13 @@ namespace EmployeeManagementSystem.Controller
 
                 Attendance.AddAttendance(attendance);
 
-                _view.ShowMessage($"Check-out successfully at {DateTime.Now.ToString("HH:mm:ss")}!",
-                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                OnShowMessage?.Invoke($"Check-out successfully at {DateTime.Now.ToString("HH:mm:ss")}!",
+                     "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 UpdateLastAttendanceStatus();
             }
             catch (Exception ex)
             {
-                _view.ShowMessage($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OnShowMessage?.Invoke($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
