@@ -13,11 +13,14 @@ namespace EmployeeManagementSystem.Controller
     {
         private readonly AttendanceManager _view;
         private List<Attendance> _attendances;
-
+        public delegate void ShowMessageHandler(string message, string title, MessageBoxButtons buttons, MessageBoxIcon icon);
+        public event ShowMessageHandler OnShowMessage;
         public AttendanceManagerController(AttendanceManager view)
         {
             _view = view;
             _view.SetController(this);
+            // Đăng ký sự kiện OnShowMessage với phương thức ShowMessage của view
+            OnShowMessage += _view.ShowMessage;
             LoadAttendanceData();
         }
 
@@ -41,18 +44,18 @@ namespace EmployeeManagementSystem.Controller
         {
             if (string.IsNullOrEmpty(selectedShift))
             {
-                _view.ShowMessage("Please select shift!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OnShowMessage?.Invoke("Please select shift!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (string.IsNullOrEmpty(selectedAction))
             {
-                _view.ShowMessage("Please select action!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                OnShowMessage?.Invoke("Please select action!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             if (_attendances.Count == 0)
             {
-                _view.ShowMessage("Empty attendance list!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                OnShowMessage?.Invoke("Empty attendance list!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -103,7 +106,7 @@ namespace EmployeeManagementSystem.Controller
 
             if (filteredList.Count == 0)
             {
-                _view.ShowMessage("No attendance data!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                OnShowMessage?.Invoke("No attendance data!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -114,7 +117,7 @@ namespace EmployeeManagementSystem.Controller
         {
             if (_view.GetRowCount() == 0)
             {
-                _view.ShowMessage("Data not found!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                OnShowMessage?.Invoke("Data not found!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -166,11 +169,11 @@ namespace EmployeeManagementSystem.Controller
                         workbook.SaveAs(saveFileDialog.FileName);
                     }
 
-                    _view.ShowMessage("Export report successfully!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    OnShowMessage?.Invoke("Export report successfully!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    _view.ShowMessage($"Error when export report: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    OnShowMessage?.Invoke($"Error when export report: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
